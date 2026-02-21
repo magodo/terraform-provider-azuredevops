@@ -10,6 +10,7 @@ import (
 	"github.com/microsoft/terraform-provider-azuredevops/internal/provider"
 )
 
+//go:generate go tool tfplugindocs generate --provider-name azuredevops --rendered-provider-name AzureDevOps
 func main() {
 	var debug bool
 
