@@ -3,12 +3,12 @@
 page_title: "azuredevops_group_membership Resource - AzureDevOps"
 subcategory: ""
 description: |-
-  
+  Manages a group membership within Azure DevOps.
 ---
 
 # azuredevops_group_membership (Resource)
 
-
+Manages a group membership within Azure DevOps.
 
 
 

@@ -3,12 +3,12 @@
 page_title: "azuredevops_project Resource - AzureDevOps"
 subcategory: ""
 description: |-
-  
+  Manages a project within Azure DevOps.
 ---
 
 # azuredevops_project (Resource)
 
-
+Manages a project within Azure DevOps.
 
 
 

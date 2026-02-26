@@ -3,12 +3,12 @@
 page_title: "azuredevops_project Data Source - AzureDevOps"
 subcategory: ""
 description: |-
-  
+  Query an existing Project within Azure DevOps.
 ---
 
 # azuredevops_project (Data Source)
 
-
+Query an existing Project within Azure DevOps.
 
 
 

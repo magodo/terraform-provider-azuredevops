@@ -99,6 +99,7 @@ type groupMembershipModel struct {
 
 func (r *groupMembershipResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
+		MarkdownDescription: "Manages a group membership within Azure DevOps.",
 		Attributes: map[string]schema.Attribute{
 			"group_id": schema.StringAttribute{
 				MarkdownDescription: "The id of the container group.",

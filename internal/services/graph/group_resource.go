@@ -102,6 +102,7 @@ type groupModel struct {
 
 func (r *groupResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
+		MarkdownDescription: "Manages a group within Azure DevOps.",
 		Attributes: map[string]schema.Attribute{
 			"origin_id": schema.StringAttribute{
 				MarkdownDescription: "This will create a new graph group that is derived from the object id of an AAD group.",

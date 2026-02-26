@@ -96,7 +96,8 @@ func (r *projectResource) IdentitySchema(ctx context.Context, req resource.Ident
 
 func (r *projectResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Version: 1,
+		MarkdownDescription: "Manages a project within Azure DevOps.",
+		Version:             1,
 		Attributes: map[string]schema.Attribute{
 			"name": schema.StringAttribute{
 				CustomType:          adocustomtype.StringCaseInsensitiveType{},

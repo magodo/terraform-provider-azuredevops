@@ -3,12 +3,12 @@
 page_title: "azuredevops_group Resource - AzureDevOps"
 subcategory: ""
 description: |-
-  
+  Manages a group within Azure DevOps.
 ---
 
 # azuredevops_group (Resource)
 
-
+Manages a group within Azure DevOps.
 
 
 
