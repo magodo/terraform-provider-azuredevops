@@ -1,3 +1,35 @@
+## 1.14.0
+
+ENHANCEMENTS
+
+- New data sources: `azuredevops_security_namespaces` and `azuredevops_security_namespace` (#1471)
+- `azuredevops_branch_policy_min_reviewers` - Support `on_each_iteration_require_vote` (#1458)
+- New resource: `azuredevops_workitemtracking_field` (#1475)
+- `azuredevops_servicehook_webhook_tfs` - Support `resource_version` (#1497)
+- New data source: `azuredevops_security_namespace_token` (#1472)
+- New resource: `azuredevops_workitemtrackingprocess_field` (#1477)
+- New resource `azuredevops_workitemtrackingprocess_page` (#1482)
+- New resource: `azuredevops_workitemtrackingprocess_list` (#1484)
+- New resource: `azuredevops_workitemtrackingprocess_state` (#1489)
+- New resource: `azuredevops_workitemtrackingprocess_system_control ` (#1490)
+- New resource: `azuredevops_deployment_group` (#1504)
+- New resource: `azuredevops_workitemtrackingprocess_inherited_control` (#1491)
+- New resource: `azuredevops_workitemtrackingprocess_inherited_page` (#1492)
+- `azuredevops_pipeline_authorization` - Support import (#1511)
+- New resource: `azuredevops_workitemtrackingprocess_inherited_state` (#1493)
+- New resource: `azuredevops_workitemtrackingprocess_rule` (#1500)
+- New resource: `azuredevops_security_permissions` (#1473)
+
+BUG FIXES
+
+- Docs: fix frontmatter formatting issue for `azuredevops_team_administrators` and `azuredevops_team` (#1498)
+- `azuredevops_group_membership` - Fix a create time `overwrite` mode bug (#1501)
+- `azuredevops_variable_group_variable` - Fix racing condition issue when multiple instances are creating in parallel (#1506)
+
+OTHERS
+
+- Test: migrate to using `terraform-plugin-testing` (#1508, #1510)
+
 ## 1.13.0
 
 ENHANCEMENTS
