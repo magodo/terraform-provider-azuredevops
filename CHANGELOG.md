@@ -1,3 +1,18 @@
+## 1.15.0
+
+ENHANCEMENTS
+
+- `azuredevops_workitem`: Add description and additional_fields_json parameters (#1521)
+
+BUG FIXES
+
+- `azuredevops_group(s)`: Added filter to filter out project-scoped groups when `project_id` is specified (#1523)
+
+DEPENDENCIES
+
+- Bump google.golang.org/grpc from 1.75.1 to 1.79.3 (#1527)
+
+
 ## 1.14.0
 
 ENHANCEMENTS
