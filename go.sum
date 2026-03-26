@@ -143,8 +143,10 @@ github.com/kylelemons/godebug v1.1.0 h1:RPNrshWIDI6G2gRW9EHilWtl7Z6Sb1BR0xunSBf0
 github.com/kylelemons/godebug v1.1.0/go.mod h1:9/0rRGxNHcop5bhtWyNeEfOS8JIWk580+fNqagV/RAw=
 github.com/magodo/azure-devops-go-api/azuredevops/v7 v7.0.0-20260129050719-5ba47e0e551c h1:R9D2csbQDA6G07R3XJDkz64rQRgXiJT7R+MGmcd8jxs=
 github.com/magodo/azure-devops-go-api/azuredevops/v7 v7.0.0-20260129050719-5ba47e0e551c/go.mod h1:xdjGnJ1pDPBk1CFrgRga62RiPnIxjrn4CiVOhuBMYaM=
-github.com/magodo/terraform-plugin-framework-docs v0.0.0-20260326025802-d7fcb031cfb1 h1:jJhZHjWE44shyM633gMZWDTLYdvJkfPwvFPQeo6M6wg=
-github.com/magodo/terraform-plugin-framework-docs v0.0.0-20260326025802-d7fcb031cfb1/go.mod h1:zZ1g7KG3ErH/8j36D4B94HmA2P4/r2qxA+mOqrJoPn8=
+github.com/magodo/terraform-plugin-framework-docs v0.0.0-20260326050212-878fe7099174 h1:8EBhAsMkzddfI5C22Hx5mrBMAZf5JyTqI1O2kx4VjYA=
+github.com/magodo/terraform-plugin-framework-docs v0.0.0-20260326050212-878fe7099174/go.mod h1:zZ1g7KG3ErH/8j36D4B94HmA2P4/r2qxA+mOqrJoPn8=
+github.com/magodo/terraform-plugin-framework-docs v0.0.0-20260326050731-d1f9a8fdd7e2 h1:jvxeJkJjrdiAHQvXMd9qGju203Gfpl6db6Y6TMzFnoU=
+github.com/magodo/terraform-plugin-framework-docs v0.0.0-20260326050731-d1f9a8fdd7e2/go.mod h1:zZ1g7KG3ErH/8j36D4B94HmA2P4/r2qxA+mOqrJoPn8=
 github.com/mattn/go-colorable v0.1.9/go.mod h1:u6P/XSegPjTcexA+o6vUJrdnUu04hMope9wVRipJSqc=
 github.com/mattn/go-colorable v0.1.12/go.mod h1:u5H1YNBxpqRaxsYJYSkiCWKzEfiAb1Gb520KVy5xxl4=
 github.com/mattn/go-colorable v0.1.14 h1:9A9LHSqF/7dyVVX6g0U9cwm9pG3kP9gSzcuIPHPsaIE=
