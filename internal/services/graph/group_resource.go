@@ -21,11 +21,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	tffwdocs "github.com/magodo/terraform-plugin-framework-docs"
 	"github.com/microsoft/azure-devops-go-api/azuredevops/v7/graph"
 	"github.com/microsoft/azure-devops-go-api/azuredevops/v7/webapi"
 	"github.com/microsoft/terraform-provider-azuredevops/internal/adocustomtype"
 	"github.com/microsoft/terraform-provider-azuredevops/internal/adovalidator"
 	"github.com/microsoft/terraform-provider-azuredevops/internal/framework"
+	"github.com/microsoft/terraform-provider-azuredevops/internal/subcategory"
 	"github.com/microsoft/terraform-provider-azuredevops/internal/utils/fwtype"
 	"github.com/microsoft/terraform-provider-azuredevops/internal/utils/pointer"
 	"github.com/microsoft/terraform-provider-azuredevops/internal/utils/retry"
@@ -559,6 +561,89 @@ func (r *groupResource) writePollCheckers() []framework.PollChecker {
 		{
 			AttrPath: path.Root("members"),
 			Target:   types.SetNull(types.StringType),
+		},
+	}
+}
+
+func (r *groupResource) RenderOption() tffwdocs.ResourceRenderOption {
+	return tffwdocs.ResourceRenderOption{
+		Subcategory: subcategory.Graph,
+		Examples: []tffwdocs.Example{
+			{
+				Header: "Basic",
+				HCL: `
+resource "azuredevops_group" "example" {
+  display_name = "example"
+}
+`,
+			},
+			{
+				Header: "With Members",
+				HCL: `
+
+resource "azuredevops_group" "example" {
+  display_name = "parent"
+  description = "description"
+  members = [
+  	azuredevops_group.member1.id,
+  	azuredevops_group.member2.id,
+  ]
+}
+
+resource "azuredevops_group" "member1" {
+  display_name = "member1"
+}
+resource "azuredevops_group" "member2" {
+  display_name = "member2"
+}
+`,
+			},
+			{
+				Header: "Created from AAD Group",
+				HCL: `
+data "azuread_client_config" "current" {}
+
+resource "azuread_group" "example" {
+  display_name     = "example"
+  owners           = [data.azuread_client_config.current.object_id]
+  security_enabled = true
+}
+
+resource "azuredevops_group" "example" {
+  origin_id = azuread_group.example.object_id
+}
+`,
+			},
+			{
+				Header: "Created from AAD mail",
+				HCL: `
+data "azuread_client_config" "current" {}
+
+resource "azuread_group" "example" {
+  display_name     = "example"
+  mail_enabled     = true
+  mail_nickname    = "example"
+  types            = ["Unified"]
+  owners           = [data.azuread_client_config.current.object_id]
+  security_enabled = true
+}
+
+resource "azuredevops_group" "example" {
+  mail = azuread_group.example.mail
+}
+`,
+			},
+		},
+		ImportId: &tffwdocs.ImportId{
+			Format:    "<group_id>",
+			ExampleId: "vssgp.xxxx",
+		},
+		IdentityExamples: []tffwdocs.Example{
+			{
+				HCL: `
+id = "vssgp.xxxx"
+`,
+			},
 		},
 	}
 }

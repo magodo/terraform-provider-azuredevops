@@ -487,10 +487,7 @@ func (r resourceWrapper) UpgradeIdentity(ctx context.Context) map[int64]resource
 }
 
 func (r resourceWrapper) RenderOption() tffwdocs.ResourceRenderOption {
-	if rr, ok := r.Resource.(tffwdocs.ResourceWithRenderOption); ok {
-		return rr.RenderOption()
-	}
-	return tffwdocs.ResourceRenderOption{}
+	return r.Resource.RenderOption()
 }
 
 func (r resourceWrapper) setIdentity(ctx context.Context, state tfsdk.State, identity *tfsdk.ResourceIdentity) (diags diag.Diagnostics) {

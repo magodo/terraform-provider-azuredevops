@@ -10,6 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
+	tffwdocs "github.com/magodo/terraform-plugin-framework-docs"
 	"github.com/microsoft/terraform-provider-azuredevops/internal/meta"
 )
 
@@ -18,6 +19,7 @@ var _ datasource.DataSourceWithConfigure = datasourceWrapper{}
 var _ datasource.DataSourceWithConfigValidators = datasourceWrapper{}
 var _ datasource.DataSourceWithValidateConfig = datasourceWrapper{}
 var _ DataSourceWithTimeout = datasourceWrapper{}
+var _ tffwdocs.DataSourceWithRenderOption = datasourceWrapper{}
 
 type datasourceWrapper struct {
 	DataSource
@@ -120,6 +122,10 @@ func (d datasourceWrapper) ValidateConfig(ctx context.Context, req datasource.Va
 		dd.ValidateConfig(ctx, req, resp)
 		return
 	}
+}
+
+func (d datasourceWrapper) RenderOption() tffwdocs.DataSourceRenderOption {
+	return d.DataSource.RenderOption()
 }
 
 func (d datasourceWrapper) logDiags(ctx context.Context, diags diag.Diagnostics) {

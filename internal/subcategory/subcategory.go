@@ -1,5 +1,6 @@
 package subcategory
 
 const (
-	Core = "Core"
+	Core  = "Core"
+	Graph = "Graph"
 )

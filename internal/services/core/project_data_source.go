@@ -10,9 +10,11 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	tffwdocs "github.com/magodo/terraform-plugin-framework-docs"
 	"github.com/microsoft/azure-devops-go-api/azuredevops/v7/core"
 	"github.com/microsoft/terraform-provider-azuredevops/internal/adovalidator"
 	"github.com/microsoft/terraform-provider-azuredevops/internal/framework"
+	"github.com/microsoft/terraform-provider-azuredevops/internal/subcategory"
 	"github.com/microsoft/terraform-provider-azuredevops/internal/utils/fwtype"
 	"github.com/microsoft/terraform-provider-azuredevops/internal/utils/pointer"
 )
@@ -96,19 +98,24 @@ func (d *projectDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 				Computed:            true,
 				Attributes: map[string]schema.Attribute{
 					"boards": schema.BoolAttribute{
-						Computed: true,
+						MarkdownDescription: "This indicates whether the `Boards` feature is enabled.",
+						Computed:            true,
 					},
 					"repositories": schema.BoolAttribute{
-						Computed: true,
+						MarkdownDescription: "This indicates whether the `Repos` feature is enabled.",
+						Computed:            true,
 					},
 					"pipelines": schema.BoolAttribute{
-						Computed: true,
+						MarkdownDescription: "This indicates whether the `Pipelines` feature is enabled.",
+						Computed:            true,
 					},
 					"testplans": schema.BoolAttribute{
-						Computed: true,
+						MarkdownDescription: "This indicates whether the `Test Plans` feature is enabled.",
+						Computed:            true,
 					},
 					"artifacts": schema.BoolAttribute{
-						Computed: true,
+						MarkdownDescription: "This indicates whether the `Artifacts` feature is enabled.",
+						Computed:            true,
 					},
 				},
 			},
@@ -188,4 +195,28 @@ func (d *projectDataSource) Read(ctx context.Context, req datasource.ReadRequest
 	}
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, config)...)
+}
+
+func (d *projectDataSource) RenderOption() tffwdocs.DataSourceRenderOption {
+	return tffwdocs.DataSourceRenderOption{
+		Subcategory: subcategory.Core,
+		Examples: []tffwdocs.Example{
+			{
+				Header: "By project_id",
+				HCL: `
+data "azuredevops_project" "example" {
+  project_id = "00000000-0000-0000-0000-000000000000"
+}
+`,
+			},
+			{
+				Header: "By name",
+				HCL: `
+data "azuredevops_project" "example" {
+  name = "myproject"
+}
+`,
+			},
+		},
+	}
 }
