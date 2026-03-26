@@ -9,6 +9,15 @@ description: |-
 
 The Azure DevOps Provider
 
+## Example Usage
+
+```terraform
+provider azuredevops {
+  org_service_url       = "https://dev.azure.com/example"
+  personal_access_token = "..."
+}
+```
+
 ## Schema
 
 ### Optional
