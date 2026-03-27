@@ -15,17 +15,17 @@ Manages a project within Azure DevOps.
 ### Basic
 
 ```terraform
-resource "azuredevops_project" "example" {
-  name = "example"
+resource "azuredevops_project" "test" {
+  name = "example-project"
 }
 ```
 
 ### Complete
 
 ```terraform
-resource "azuredevops_project" "example" {
-  name               = "example"
-  description        = "A example project."
+resource "azuredevops_project" "test" {
+  name               = "example-project"
+  description        = "example description"
   version_control    = "Git"
   work_item_template = "Basic"
   features = {

@@ -248,23 +248,7 @@ func (r *groupMembershipResource) RenderOption() tffwdocs.ResourceRenderOption {
 		Subcategory: subcategory.Graph,
 		Examples: []tffwdocs.Example{
 			{
-				HCL: `
-resource "azuredevops_group" "container" {
-  display_name = "container"
-  lifecycle {
-	  ignore_changes = [members]
-  }
-}
-
-resource "azuredevops_group" "member" {
-  display_name = "member"
-}
-
-resource "azuredevops_group_membership" "example" {
-  group_id = azuredevops_group.container.id
-  member_id = azuredevops_group.member.id
-}
-`,
+				HCL: NewGroupMembershipResourceExample(nil).Basic(),
 			},
 		},
 		ImportId: &tffwdocs.ImportId{

@@ -203,19 +203,11 @@ func (d *projectDataSource) RenderOption() tffwdocs.DataSourceRenderOption {
 		Examples: []tffwdocs.Example{
 			{
 				Header: "By project_id",
-				HCL: `
-data "azuredevops_project" "example" {
-  project_id = "00000000-0000-0000-0000-000000000000"
-}
-`,
+				HCL:    NewProjectDataSourceExample(nil).ById(),
 			},
 			{
 				Header: "By name",
-				HCL: `
-data "azuredevops_project" "example" {
-  name = "myproject"
-}
-`,
+				HCL:    NewProjectDataSourceExample(nil).ByName(),
 			},
 		},
 	}

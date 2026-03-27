@@ -15,16 +15,26 @@ Query an existing Project within Azure DevOps.
 ### By project_id
 
 ```terraform
-data "azuredevops_project" "example" {
-  project_id = "00000000-0000-0000-0000-000000000000"
+resource "azuredevops_project" "test" {
+  name        = "example-project"
+  description = "foo"
+}
+
+data "azuredevops_project" "test" {
+  project_id = azuredevops_project.test.id
 }
 ```
 
 ### By name
 
 ```terraform
-data "azuredevops_project" "example" {
-  name = "myproject"
+resource "azuredevops_project" "test" {
+  name        = "example-project"
+  description = "foo"
+}
+
+data "azuredevops_project" "test" {
+  name = azuredevops_project.test.name
 }
 ```
 

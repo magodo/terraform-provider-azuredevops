@@ -14,6 +14,7 @@ import (
 	"github.com/microsoft/terraform-provider-azuredevops/internal/acceptance/checks"
 	"github.com/microsoft/terraform-provider-azuredevops/internal/acceptance/planchecks"
 	"github.com/microsoft/terraform-provider-azuredevops/internal/client"
+	serviceCore "github.com/microsoft/terraform-provider-azuredevops/internal/services/core"
 	"github.com/microsoft/terraform-provider-azuredevops/internal/utils/errorutil"
 )
 
@@ -36,7 +37,7 @@ func TestAccProject_basic(t *testing.T) {
 
 	data.ResourceTest(t, r, []resource.TestStep{
 		{
-			Config: r.basic(data),
+			Config: serviceCore.NewProjectResourceExample(&data.RandData).Basic(),
 			Check: resource.ComposeTestCheckFunc(
 				checks.ExistsInAzure(t, r, data.ResourceAddr()),
 				resource.TestCheckResourceAttrSet(data.ResourceAddr(), "process_template_id"),
@@ -52,7 +53,7 @@ func TestAccProject_complete(t *testing.T) {
 
 	data.ResourceTest(t, r, []resource.TestStep{
 		{
-			Config: r.complete(data),
+			Config: serviceCore.NewProjectResourceExample(&data.RandData).Complete(),
 			Check: resource.ComposeTestCheckFunc(
 				checks.ExistsInAzure(t, r, data.ResourceAddr()),
 				resource.TestCheckResourceAttrSet(data.ResourceAddr(), "process_template_id"),
@@ -68,7 +69,7 @@ func TestAccProject_update(t *testing.T) {
 
 	data.ResourceTest(t, r, []resource.TestStep{
 		{
-			Config: r.basic(data),
+			Config: serviceCore.NewProjectResourceExample(&data.RandData).Basic(),
 			Check: resource.ComposeTestCheckFunc(
 				checks.ExistsInAzure(t, r, data.ResourceAddr()),
 				resource.TestCheckResourceAttrSet(data.ResourceAddr(), "process_template_id"),
@@ -76,7 +77,7 @@ func TestAccProject_update(t *testing.T) {
 		},
 		data.ImportStep(),
 		{
-			Config: r.complete(data),
+			Config: serviceCore.NewProjectResourceExample(&data.RandData).Complete(),
 			ConfigPlanChecks: resource.ConfigPlanChecks{
 				PreApply: []plancheck.PlanCheck{
 					planchecks.IsNotResourceAction(data.ResourceAddr(), plancheck.ResourceActionReplace),
@@ -89,7 +90,7 @@ func TestAccProject_update(t *testing.T) {
 		},
 		data.ImportStep(),
 		{
-			Config: r.basic(data),
+			Config: serviceCore.NewProjectResourceExample(&data.RandData).Basic(),
 			Check: resource.ComposeTestCheckFunc(
 				checks.ExistsInAzure(t, r, data.ResourceAddr()),
 				resource.TestCheckResourceAttrSet(data.ResourceAddr(), "process_template_id"),
@@ -105,7 +106,7 @@ func TestAccProject_features(t *testing.T) {
 
 	data.ResourceTest(t, r, []resource.TestStep{
 		{
-			Config: r.basic(data),
+			Config: serviceCore.NewProjectResourceExample(&data.RandData).Basic(),
 			Check: resource.ComposeTestCheckFunc(
 				checks.ExistsInAzure(t, r, data.ResourceAddr()),
 				resource.TestCheckResourceAttrSet(data.ResourceAddr(), "process_template_id"),
@@ -134,7 +135,7 @@ func TestAccProject_features(t *testing.T) {
 		},
 		data.ImportStep(),
 		{
-			Config: r.basic(data),
+			Config: serviceCore.NewProjectResourceExample(&data.RandData).Basic(),
 			Check: resource.ComposeTestCheckFunc(
 				checks.ExistsInAzure(t, r, data.ResourceAddr()),
 				resource.TestCheckResourceAttrSet(data.ResourceAddr(), "process_template_id"),
@@ -171,42 +172,18 @@ func TestAccProject_migrateFromV0(t *testing.T) {
 	})
 }
 
-func (r ProjectResource) basic(data acceptance.TestData) string {
-	return fmt.Sprintf(`
-resource "azuredevops_project" "test" {
-  name = "acctest-%[1]s"
-}`, data.RandomString)
-}
-
 func (r ProjectResource) features(data acceptance.TestData, v bool) string {
 	return fmt.Sprintf(`
 resource "azuredevops_project" "test" {
   name               = "acctest-%[1]s"
   features = {
     boards     = %[2]t
-    repositories      = %[2]t
+    repositories = %[2]t
     pipelines  = %[2]t
     testplans  = %[2]t
     artifacts  = %[2]t
   }
-}`, data.RandomString, v)
-}
-
-func (r ProjectResource) complete(data acceptance.TestData) string {
-	return fmt.Sprintf(`
-resource "azuredevops_project" "test" {
-  name               = "acctest-%[1]s"
-  description        = "test description"
-  version_control    = "Git"
-  work_item_template = "Basic"
-  features = {
-    boards     = false
-    repositories      = false
-    pipelines  = false
-    testplans  = false
-    artifacts  = false
-  }
-}`, data.RandomString)
+}`, data.RandData.Str, v)
 }
 
 func (r ProjectResource) requiresImport(data acceptance.TestData) string {
@@ -215,7 +192,7 @@ func (r ProjectResource) requiresImport(data acceptance.TestData) string {
 
 resource "azuredevops_project" "import" {
   name = azuredevops_project.test.name
-}`, r.basic(data))
+}`, serviceCore.NewProjectResourceExample(&data.RandData).Basic())
 }
 
 func (r ProjectResource) migrateV0(data acceptance.TestData) string {
@@ -235,12 +212,12 @@ resource "azuredevops_project" "test" {
 
 # This is to accomodate the eventual consistency issue of the ADO API,
 # which is not handled by the v1 azuredevops provider.
-resource "time_sleep" "wait_30_seconds" {
+resource "time_sleep" "wait_60_seconds" {
   depends_on = [azuredevops_project.test]
-  create_duration = "30s"
+  create_duration = "60s"
 }
 
-`, data.RandomString)
+`, data.RandData.Str)
 }
 
 func (r ProjectResource) migrateNow(data acceptance.TestData) string {
@@ -254,5 +231,5 @@ resource "azuredevops_project" "test" {
     boards     		= false
     repositories    = true
   }
-}`, data.RandomString)
+}`, data.RandData.Str)
 }

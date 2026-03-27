@@ -571,67 +571,23 @@ func (r *groupResource) RenderOption() tffwdocs.ResourceRenderOption {
 		Examples: []tffwdocs.Example{
 			{
 				Header: "Basic",
-				HCL: `
-resource "azuredevops_group" "example" {
-  display_name = "example"
-}
-`,
+				HCL:    NewGroupResourceExample(nil).VstsBasic(),
 			},
 			{
 				Header: "With Members",
-				HCL: `
-
-resource "azuredevops_group" "example" {
-  display_name = "parent"
-  description = "description"
-  members = [
-  	azuredevops_group.member1.id,
-  	azuredevops_group.member2.id,
-  ]
-}
-
-resource "azuredevops_group" "member1" {
-  display_name = "member1"
-}
-resource "azuredevops_group" "member2" {
-  display_name = "member2"
-}
-`,
+				HCL:    NewGroupResourceExample(nil).VstsComplete(),
 			},
 			{
-				Header: "Created from AAD Group",
-				HCL: `
-data "azuread_client_config" "current" {}
-
-resource "azuread_group" "example" {
-  display_name     = "example"
-  owners           = [data.azuread_client_config.current.object_id]
-  security_enabled = true
-}
-
-resource "azuredevops_group" "example" {
-  origin_id = azuread_group.example.object_id
-}
-`,
+				Header: "Project Scope",
+				HCL:    NewGroupResourceExample(nil).ScopeProject(),
+			},
+			{
+				Header: "Created from AAD Group Id",
+				HCL:    NewGroupResourceExample(nil).AadOrigin(),
 			},
 			{
 				Header: "Created from AAD mail",
-				HCL: `
-data "azuread_client_config" "current" {}
-
-resource "azuread_group" "example" {
-  display_name     = "example"
-  mail_enabled     = true
-  mail_nickname    = "example"
-  types            = ["Unified"]
-  owners           = [data.azuread_client_config.current.object_id]
-  security_enabled = true
-}
-
-resource "azuredevops_group" "example" {
-  mail = azuread_group.example.mail
-}
-`,
+				HCL:    NewGroupResourceExample(nil).AadMail(),
 			},
 		},
 		ImportId: &tffwdocs.ImportId{

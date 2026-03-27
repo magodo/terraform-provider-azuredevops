@@ -15,16 +15,16 @@ Manages a group within Azure DevOps.
 ### Basic
 
 ```terraform
-resource "azuredevops_group" "example" {
-  display_name = "example"
+resource "azuredevops_group" "test" {
+  display_name = "example-group"
 }
 ```
 
 ### With Members
 
 ```terraform
-resource "azuredevops_group" "example" {
-  display_name = "parent"
+resource "azuredevops_group" "test" {
+  display_name = "example-group"
   description  = "description"
   members = [
     azuredevops_group.member1.id,
@@ -33,26 +33,39 @@ resource "azuredevops_group" "example" {
 }
 
 resource "azuredevops_group" "member1" {
-  display_name = "member1"
+  display_name = "example-member1"
 }
 resource "azuredevops_group" "member2" {
-  display_name = "member2"
+  display_name = "example-member2"
 }
 ```
 
-### Created from AAD Group
+### Project Scope
+
+```terraform
+resource "azuredevops_project" "test" {
+  name = "example-project"
+}
+
+resource "azuredevops_group" "test" {
+  scope        = azuredevops_project.test.id
+  display_name = "example-group"
+}
+```
+
+### Created from AAD Group Id
 
 ```terraform
 data "azuread_client_config" "current" {}
 
-resource "azuread_group" "example" {
-  display_name     = "example"
+resource "azuread_group" "test" {
+  display_name     = "example-group"
   owners           = [data.azuread_client_config.current.object_id]
   security_enabled = true
 }
 
-resource "azuredevops_group" "example" {
-  origin_id = azuread_group.example.object_id
+resource "azuredevops_group" "test" {
+  origin_id = azuread_group.test.object_id
 }
 ```
 
@@ -61,17 +74,17 @@ resource "azuredevops_group" "example" {
 ```terraform
 data "azuread_client_config" "current" {}
 
-resource "azuread_group" "example" {
-  display_name     = "example"
+resource "azuread_group" "test" {
+  display_name     = "example-group"
   mail_enabled     = true
-  mail_nickname    = "example"
+  mail_nickname    = "example-mail"
   types            = ["Unified"]
   owners           = [data.azuread_client_config.current.object_id]
   security_enabled = true
 }
 
-resource "azuredevops_group" "example" {
-  mail = azuread_group.example.mail
+resource "azuredevops_group" "test" {
+  mail = azuread_group.test.mail
 }
 ```
 

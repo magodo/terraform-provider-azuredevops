@@ -14,17 +14,17 @@ Manages a group membership within Azure DevOps.
 
 ```terraform
 resource "azuredevops_group" "container" {
-  display_name = "container"
+  display_name = "example-group"
   lifecycle {
     ignore_changes = [members]
   }
 }
 
 resource "azuredevops_group" "member" {
-  display_name = "member"
+  display_name = "example-member"
 }
 
-resource "azuredevops_group_membership" "example" {
+resource "azuredevops_group_membership" "test" {
   group_id  = azuredevops_group.container.id
   member_id = azuredevops_group.member.id
 }

@@ -573,29 +573,11 @@ func (r *projectResource) RenderOption() tffwdocs.ResourceRenderOption {
 		Examples: []tffwdocs.Example{
 			{
 				Header: "Basic",
-				HCL: `
-resource "azuredevops_project" "example" {
-  name = "example"
-}
-`,
+				HCL:    NewProjectResourceExample(nil).Basic(),
 			},
 			{
 				Header: "Complete",
-				HCL: `
-resource "azuredevops_project" "example" {
-  name               = "example"
-  description        = "A example project."
-  version_control    = "Git"
-  work_item_template = "Basic"
-  features = {
-    boards     = false
-    repositories      = false
-    pipelines  = false
-    testplans  = false
-    artifacts  = false
-  }
-}
-`,
+				HCL:    NewProjectResourceExample(nil).Complete(),
 			},
 		},
 		ImportId: &tffwdocs.ImportId{
