@@ -14,7 +14,7 @@ require (
 	github.com/hashicorp/terraform-plugin-go v0.29.0
 	github.com/hashicorp/terraform-plugin-log v0.10.0
 	github.com/hashicorp/terraform-plugin-testing v1.14.0
-	github.com/magodo/terraform-plugin-framework-docs v0.0.0-20260326050731-d1f9a8fdd7e2
+	github.com/magodo/terraform-plugin-framework-docs v0.2.0
 	github.com/microsoft/azure-devops-go-api/azuredevops/v7 v7.0.0-00010101000000-000000000000
 )
 
