@@ -19,6 +19,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
+	tffwdocs "github.com/magodo/terraform-plugin-framework-docs"
 	"github.com/microsoft/azure-devops-go-api/azuredevops/v7"
 	"github.com/microsoft/terraform-provider-azuredevops/internal/adovalidator"
 	"github.com/microsoft/terraform-provider-azuredevops/internal/client"
@@ -28,7 +29,8 @@ import (
 	"github.com/microsoft/terraform-provider-azuredevops/internal/services/graph"
 )
 
-var _ provider.Provider = (*Provider)(nil)
+var _ provider.Provider = &Provider{}
+var _ tffwdocs.ProviderWithRenderOption = &Provider{}
 
 type Provider struct{}
 
@@ -382,4 +384,19 @@ func (_ Provider) newAuthProvider(m *providerModel) (azuredevops.AuthProvider, e
 		Scopes: []string{AzureDevOpsAppDefaultScope},
 	})
 	return ap, nil
+}
+
+func (p *Provider) RenderOption() tffwdocs.ProviderRenderOption {
+	return tffwdocs.ProviderRenderOption{
+		Examples: []tffwdocs.Example{
+			{
+				HCL: `
+provider azuredevops {
+	org_service_url = "https://dev.azure.com/example"
+	personal_access_token = "..."
+}
+`,
+			},
+		},
+	}
 }

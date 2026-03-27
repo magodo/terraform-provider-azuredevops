@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
+	tffwdocs "github.com/magodo/terraform-plugin-framework-docs"
 )
 
 // DataSourceTimeout specifies the default timeout value for the data source
@@ -16,6 +17,7 @@ type DataSourceTimeout struct {
 type DataSource interface {
 	BaseResource
 	datasource.DataSource
+	tffwdocs.DataSourceWithRenderOption
 }
 
 // DataSourceWithTimeout is an opt-in interface that can implement customized timeout.

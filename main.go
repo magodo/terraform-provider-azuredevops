@@ -10,6 +10,7 @@ import (
 	"github.com/microsoft/terraform-provider-azuredevops/internal/provider"
 )
 
+//go:generate go run ./internal/tools/gendoc
 func main() {
 	var debug bool
 

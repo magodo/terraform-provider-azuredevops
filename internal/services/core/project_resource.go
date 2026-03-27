@@ -19,10 +19,12 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	tffwdocs "github.com/magodo/terraform-plugin-framework-docs"
 	"github.com/microsoft/azure-devops-go-api/azuredevops/v7/core"
 	"github.com/microsoft/azure-devops-go-api/azuredevops/v7/operations"
 	"github.com/microsoft/terraform-provider-azuredevops/internal/adocustomtype"
 	"github.com/microsoft/terraform-provider-azuredevops/internal/framework"
+	"github.com/microsoft/terraform-provider-azuredevops/internal/subcategory"
 	"github.com/microsoft/terraform-provider-azuredevops/internal/utils/fwtype"
 	"github.com/microsoft/terraform-provider-azuredevops/internal/utils/pointer"
 	"github.com/microsoft/terraform-provider-azuredevops/internal/utils/retry"
@@ -33,6 +35,7 @@ var _ framework.ResourceWithPostCreate = &projectResource{}
 var _ framework.ResourceWithPostCreatePoll = &projectResource{}
 var _ framework.ResourceWithPostUpdate = &projectResource{}
 var _ framework.ResourceWithPostUpdatePoll = &projectResource{}
+var _ tffwdocs.ResourceWithRenderOption = &projectResource{}
 
 func NewProjectResource() framework.Resource {
 	return &projectResource{}
@@ -96,7 +99,8 @@ func (r *projectResource) IdentitySchema(ctx context.Context, req resource.Ident
 
 func (r *projectResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Version: 1,
+		MarkdownDescription: "Manages a project within Azure DevOps.",
+		Version:             1,
 		Attributes: map[string]schema.Attribute{
 			"name": schema.StringAttribute{
 				CustomType:          adocustomtype.StringCaseInsensitiveType{},
@@ -158,24 +162,29 @@ func (r *projectResource) Schema(ctx context.Context, req resource.SchemaRequest
 				Computed:            true,
 				Attributes: map[string]schema.Attribute{
 					"boards": schema.BoolAttribute{
-						Optional: true,
-						Computed: true,
+						MarkdownDescription: "This indicates whether the `Boards` feature is enabled.",
+						Optional:            true,
+						Computed:            true,
 					},
 					"repositories": schema.BoolAttribute{
-						Optional: true,
-						Computed: true,
+						MarkdownDescription: "This indicates whether the `Repos` feature is enabled.",
+						Optional:            true,
+						Computed:            true,
 					},
 					"pipelines": schema.BoolAttribute{
-						Optional: true,
-						Computed: true,
+						MarkdownDescription: "This indicates whether the `Pipelines` feature is enabled.",
+						Optional:            true,
+						Computed:            true,
 					},
 					"testplans": schema.BoolAttribute{
-						Optional: true,
-						Computed: true,
+						MarkdownDescription: "This indicates whether the `Test Plans` feature is enabled.",
+						Optional:            true,
+						Computed:            true,
 					},
 					"artifacts": schema.BoolAttribute{
-						Optional: true,
-						Computed: true,
+						MarkdownDescription: "This indicates whether the `Artifacts` feature is enabled.",
+						Optional:            true,
+						Computed:            true,
 					},
 				},
 			},
@@ -556,4 +565,31 @@ func (r *projectResource) postWritePollCheckers() []framework.PollChecker {
 
 func (r *projectResource) postWritePollOption(ctx context.Context) retry.RetryOption {
 	return retry.NewSimpleRetryOption(ctx, 10, time.Second)
+}
+
+func (r *projectResource) RenderOption() tffwdocs.ResourceRenderOption {
+	return tffwdocs.ResourceRenderOption{
+		Subcategory: subcategory.Core,
+		Examples: []tffwdocs.Example{
+			{
+				Header: "Basic",
+				HCL:    NewProjectResourceExample(nil).Basic(),
+			},
+			{
+				Header: "Complete",
+				HCL:    NewProjectResourceExample(nil).Complete(),
+			},
+		},
+		ImportId: &tffwdocs.ImportId{
+			Format:    "<project_id>",
+			ExampleId: "00000000-0000-0000-0000-000000000000",
+		},
+		IdentityExamples: []tffwdocs.Example{
+			{
+				HCL: `
+id = "00000000-0000-0000-0000-000000000000"
+`,
+			},
+		},
+	}
 }

@@ -7,6 +7,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
+	tffwdocs "github.com/magodo/terraform-plugin-framework-docs"
 )
 
 // ResourceTimeout specifies the default timeout value for each operation.
@@ -49,6 +50,8 @@ type Resource interface {
 	// 		 Instead, it is supposed to embed the WithMetadata to meet the interface requirement.
 	//
 	resource.ResourceWithIdentity
+
+	tffwdocs.ResourceWithRenderOption
 }
 
 // ResourceWithTimeout is an opt-in interface that can implement customized timeout.

@@ -11,6 +11,7 @@ import (
 	"github.com/microsoft/terraform-provider-azuredevops/internal/acceptance"
 	"github.com/microsoft/terraform-provider-azuredevops/internal/acceptance/checks"
 	"github.com/microsoft/terraform-provider-azuredevops/internal/client"
+	serviceGraph "github.com/microsoft/terraform-provider-azuredevops/internal/services/graph"
 	"github.com/microsoft/terraform-provider-azuredevops/internal/utils/errorutil"
 	"github.com/microsoft/terraform-provider-azuredevops/internal/utils/pointer"
 )
@@ -31,13 +32,13 @@ func (p GroupMembershipResource) Exists(ctx context.Context, client *client.Clie
 	return false, err
 }
 
-func TestAccGroupMembership_group(t *testing.T) {
+func TestAccGroupMembership_basic(t *testing.T) {
 	data := acceptance.BuildTestData(t, "azuredevops_group_membership", "test")
 	r := GroupMembershipResource{}
 
 	data.ResourceTest(t, r, []resource.TestStep{
 		{
-			Config: r.group(data),
+			Config: serviceGraph.NewGroupMembershipResourceExample(&data.RandData).Basic(),
 			Check: resource.ComposeTestCheckFunc(
 				checks.ExistsInAzure(t, r, data.ResourceAddr()),
 			),
@@ -52,7 +53,7 @@ func TestAccGroupMembership_requiresImport(t *testing.T) {
 
 	data.ResourceTest(t, r, []resource.TestStep{
 		{
-			Config: r.group(data),
+			Config: serviceGraph.NewGroupMembershipResourceExample(&data.RandData).Basic(),
 			Check: resource.ComposeTestCheckFunc(
 				checks.ExistsInAzure(t, r, data.ResourceAddr()),
 			),
@@ -64,26 +65,6 @@ func TestAccGroupMembership_requiresImport(t *testing.T) {
 	})
 }
 
-func (r GroupMembershipResource) group(data acceptance.TestData) string {
-	return fmt.Sprintf(`
-resource "azuredevops_group" "container" {
-  display_name = "acctest-%[1]s"
-  lifecycle {
-	  ignore_changes = [members]
-  }
-}
-
-resource "azuredevops_group" "member" {
-  display_name = "acctest-member-%[1]s"
-}
-
-resource "azuredevops_group_membership" "test" {
-  group_id = azuredevops_group.container.id
-  member_id = azuredevops_group.member.id
-}
-`, data.RandomString)
-}
-
 func (r GroupMembershipResource) requiresImport(data acceptance.TestData) string {
 	return fmt.Sprintf(`
 %s
@@ -92,5 +73,5 @@ resource "azuredevops_group_membership" "import" {
   group_id = azuredevops_group_membership.test.group_id
   member_id = azuredevops_group_membership.test.member_id
 }
-`, r.group(data))
+`, serviceGraph.NewGroupMembershipResourceExample(&data.RandData).Basic())
 }

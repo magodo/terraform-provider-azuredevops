@@ -21,11 +21,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	tffwdocs "github.com/magodo/terraform-plugin-framework-docs"
 	"github.com/microsoft/azure-devops-go-api/azuredevops/v7/graph"
 	"github.com/microsoft/azure-devops-go-api/azuredevops/v7/webapi"
 	"github.com/microsoft/terraform-provider-azuredevops/internal/adocustomtype"
 	"github.com/microsoft/terraform-provider-azuredevops/internal/adovalidator"
 	"github.com/microsoft/terraform-provider-azuredevops/internal/framework"
+	"github.com/microsoft/terraform-provider-azuredevops/internal/subcategory"
 	"github.com/microsoft/terraform-provider-azuredevops/internal/utils/fwtype"
 	"github.com/microsoft/terraform-provider-azuredevops/internal/utils/pointer"
 	"github.com/microsoft/terraform-provider-azuredevops/internal/utils/retry"
@@ -102,6 +104,7 @@ type groupModel struct {
 
 func (r *groupResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
+		MarkdownDescription: "Manages a group within Azure DevOps.",
 		Attributes: map[string]schema.Attribute{
 			"origin_id": schema.StringAttribute{
 				MarkdownDescription: "This will create a new graph group that is derived from the object id of an AAD group.",
@@ -558,6 +561,45 @@ func (r *groupResource) writePollCheckers() []framework.PollChecker {
 		{
 			AttrPath: path.Root("members"),
 			Target:   types.SetNull(types.StringType),
+		},
+	}
+}
+
+func (r *groupResource) RenderOption() tffwdocs.ResourceRenderOption {
+	return tffwdocs.ResourceRenderOption{
+		Subcategory: subcategory.Graph,
+		Examples: []tffwdocs.Example{
+			{
+				Header: "Basic",
+				HCL:    NewGroupResourceExample(nil).VstsBasic(),
+			},
+			{
+				Header: "With Members",
+				HCL:    NewGroupResourceExample(nil).VstsComplete(),
+			},
+			{
+				Header: "Project Scope",
+				HCL:    NewGroupResourceExample(nil).ScopeProject(),
+			},
+			{
+				Header: "Created from AAD Group Id",
+				HCL:    NewGroupResourceExample(nil).AadOrigin(),
+			},
+			{
+				Header: "Created from AAD mail",
+				HCL:    NewGroupResourceExample(nil).AadMail(),
+			},
+		},
+		ImportId: &tffwdocs.ImportId{
+			Format:    "<group_id>",
+			ExampleId: "vssgp.xxxx",
+		},
+		IdentityExamples: []tffwdocs.Example{
+			{
+				HCL: `
+id = "vssgp.xxxx"
+`,
+			},
 		},
 	}
 }

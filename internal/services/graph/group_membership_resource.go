@@ -18,8 +18,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	tffwdocs "github.com/magodo/terraform-plugin-framework-docs"
 	"github.com/microsoft/azure-devops-go-api/azuredevops/v7/graph"
 	"github.com/microsoft/terraform-provider-azuredevops/internal/framework"
+	"github.com/microsoft/terraform-provider-azuredevops/internal/subcategory"
 	"github.com/microsoft/terraform-provider-azuredevops/internal/utils/errorutil"
 	"github.com/microsoft/terraform-provider-azuredevops/internal/utils/retry"
 )
@@ -99,6 +101,7 @@ type groupMembershipModel struct {
 
 func (r *groupMembershipResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
+		MarkdownDescription: "Manages a group membership within Azure DevOps.",
 		Attributes: map[string]schema.Attribute{
 			"group_id": schema.StringAttribute{
 				MarkdownDescription: "The id of the container group.",
@@ -238,4 +241,27 @@ func (r *groupMembershipResource) DeletePollRetryableDiags(diags diag.Diagnostic
 
 func (r *groupMembershipResource) DeletePollTerminalDiags(diags diag.Diagnostics) bool {
 	return slices.ContainsFunc(diags, framework.IsDiagResourceNotFound)
+}
+
+func (r *groupMembershipResource) RenderOption() tffwdocs.ResourceRenderOption {
+	return tffwdocs.ResourceRenderOption{
+		Subcategory: subcategory.Graph,
+		Examples: []tffwdocs.Example{
+			{
+				HCL: NewGroupMembershipResourceExample(nil).Basic(),
+			},
+		},
+		ImportId: &tffwdocs.ImportId{
+			Format:    "<group_id>/<member_id>",
+			ExampleId: "vssgp.xxxx/vssgp.yyyy",
+		},
+		IdentityExamples: []tffwdocs.Example{
+			{
+				HCL: `
+group_id = "vssgp.xxxx"
+member_id = "vssgp.yyyy"
+`,
+			},
+		},
+	}
 }

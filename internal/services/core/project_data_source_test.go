@@ -1,22 +1,19 @@
 package core_test
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"github.com/microsoft/terraform-provider-azuredevops/internal/acceptance"
+	serviceCore "github.com/microsoft/terraform-provider-azuredevops/internal/services/core"
 )
 
-type ProjectDataSource struct{}
-
-func TestAccDataSourceProject_withName(t *testing.T) {
+func TestAccDataSourceProject_byName(t *testing.T) {
 	data := acceptance.BuildTestData(t, "data.azuredevops_project", "test")
-	d := ProjectDataSource{}
 
 	data.DataSourceTest(t, []resource.TestStep{
 		{
-			Config: d.withName(data),
+			Config: serviceCore.NewProjectDataSourceExample(&data.RandData).ByName(),
 			Check: resource.ComposeTestCheckFunc(
 				resource.TestCheckResourceAttrSet(data.ResourceAddr(), "name"),
 				resource.TestCheckResourceAttrSet(data.ResourceAddr(), "project_id"),
@@ -31,13 +28,12 @@ func TestAccDataSourceProject_withName(t *testing.T) {
 	})
 }
 
-func TestAccDataSourceProject_withID(t *testing.T) {
+func TestAccDataSourceProject_byID(t *testing.T) {
 	data := acceptance.BuildTestData(t, "data.azuredevops_project", "test")
-	d := ProjectDataSource{}
 
 	data.DataSourceTest(t, []resource.TestStep{
 		{
-			Config: d.withID(data),
+			Config: serviceCore.NewProjectDataSourceExample(&data.RandData).ById(),
 			Check: resource.ComposeTestCheckFunc(
 				resource.TestCheckResourceAttrSet(data.ResourceAddr(), "name"),
 				resource.TestCheckResourceAttrSet(data.ResourceAddr(), "project_id"),
@@ -50,30 +46,4 @@ func TestAccDataSourceProject_withID(t *testing.T) {
 			),
 		},
 	})
-}
-
-func (d ProjectDataSource) withName(data acceptance.TestData) string {
-	return fmt.Sprintf(`
-resource "azuredevops_project" "test" {
-  name               = "acctest-%[1]s"
-  description        = "foo"
-}
-
-data "azuredevops_project" "test" {
-  project_id = azuredevops_project.test.id
-}
-`, data.RandomString)
-}
-
-func (d ProjectDataSource) withID(data acceptance.TestData) string {
-	return fmt.Sprintf(`
-resource "azuredevops_project" "test" {
-  name               = "acctest-%[1]s"
-  description        = "foo"
-}
-
-data "azuredevops_project" "test" {
-  name = azuredevops_project.test.name
-}
-`, data.RandomString)
 }

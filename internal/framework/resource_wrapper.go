@@ -13,6 +13,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
+	tffwdocs "github.com/magodo/terraform-plugin-framework-docs"
 	"github.com/microsoft/terraform-provider-azuredevops/internal/meta"
 	"github.com/microsoft/terraform-provider-azuredevops/internal/utils/ctxutil"
 	"github.com/microsoft/terraform-provider-azuredevops/internal/utils/errorutil"
@@ -29,6 +30,7 @@ var _ resource.ResourceWithUpgradeState = resourceWrapper{}
 var _ resource.ResourceWithValidateConfig = resourceWrapper{}
 var _ resource.ResourceWithUpgradeIdentity = resourceWrapper{}
 var _ ResourceWithTimeout = resourceWrapper{}
+var _ tffwdocs.ResourceWithRenderOption = resourceWrapper{}
 
 type resourceWrapper struct {
 	Resource
@@ -482,6 +484,10 @@ func (r resourceWrapper) UpgradeIdentity(ctx context.Context) map[int64]resource
 		return rr.UpgradeIdentity(ctx)
 	}
 	return nil
+}
+
+func (r resourceWrapper) RenderOption() tffwdocs.ResourceRenderOption {
+	return r.Resource.RenderOption()
 }
 
 func (r resourceWrapper) setIdentity(ctx context.Context, state tfsdk.State, identity *tfsdk.ResourceIdentity) (diags diag.Diagnostics) {
